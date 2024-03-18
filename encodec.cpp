@@ -1040,7 +1040,7 @@ struct ggml_tensor * encodec_forward_decoder(
 
 struct ggml_cgraph * encodec_build_graph(
         struct encodec_context * ectx,
-            std::vector<float> & inp_audio,
+            const std::vector<float> & inp_audio,
         const encodec_run_mode   mode) {
     assert(mode == encodec_run_mode::full || mode == encodec_run_mode::encode);
 
@@ -1111,7 +1111,7 @@ struct ggml_cgraph * encodec_build_graph(
 
 struct ggml_cgraph * encodec_build_graph(
         struct encodec_context * ectx,
-          std::vector<int32_t> & codes,
+          const std::vector<int32_t> & codes,
         const encodec_run_mode   mode) {
     assert(mode == encodec_run_mode::decode);
 
@@ -1182,7 +1182,7 @@ struct ggml_cgraph * encodec_build_graph(
 
 bool encodec_eval_internal(
         struct encodec_context * ectx,
-            std::vector<float> & raw_audio,
+            const std::vector<float> & raw_audio,
                      const int   n_threads,
         const encodec_run_mode   mode) {
     auto & model  = ectx->model;
@@ -1212,7 +1212,7 @@ bool encodec_eval_internal(
 
 bool encodec_eval_internal(
         struct encodec_context * ectx,
-          std::vector<int32_t> & codes,
+          const std::vector<int32_t> & codes,
                      const int   n_threads,
         const encodec_run_mode   mode) {
     auto & model  = ectx->model;
@@ -1243,7 +1243,7 @@ bool encodec_eval_internal(
 
 bool encodec_eval(
             struct encodec_context * ectx,
-                std::vector<float> & raw_audio,
+                const std::vector<float> & raw_audio,
                          const int   n_threads,
             const encodec_run_mode   mode) {
     const int64_t t_start_ms = ggml_time_ms();
@@ -1281,7 +1281,7 @@ bool encodec_eval(
 
 bool encodec_eval(
             struct encodec_context * ectx,
-              std::vector<int32_t> & codes,
+              const std::vector<int32_t> & codes,
                          const int   n_threads,
             const encodec_run_mode   mode) {
     const int64_t t_start_ms = ggml_time_ms();
@@ -1319,7 +1319,7 @@ bool encodec_eval(
 
 bool encodec_reconstruct_audio(
             struct encodec_context * ectx,
-                std::vector<float> & raw_audio,
+                const std::vector<float> & raw_audio,
                                int   n_threads) {
     if (!encodec_eval(ectx, raw_audio, n_threads, encodec_run_mode::full)) {
         fprintf(stderr, "%s: failed to run encodec eval\n", __func__);
@@ -1345,7 +1345,7 @@ bool encodec_reconstruct_audio(
 
 bool encodec_compress_audio(
             struct encodec_context * ectx,
-                std::vector<float> & raw_audio,
+                const std::vector<float> & raw_audio,
                                int   n_threads) {
     if(!encodec_eval(ectx, raw_audio, n_threads, encodec_run_mode::encode)) {
         fprintf(stderr, "%s: failed to run encodec eval\n", __func__);
@@ -1371,7 +1371,7 @@ bool encodec_compress_audio(
 
 bool encodec_decompress_audio(
             struct encodec_context * ectx,
-              std::vector<int32_t> & codes,
+              const std::vector<int32_t> & codes,
                                int   n_threads) {
     if (!encodec_eval(ectx, codes, n_threads, encodec_run_mode::decode)) {
         fprintf(stderr, "%s: failed to run encodec eval\n", __func__);

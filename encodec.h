@@ -214,7 +214,7 @@ void encodec_set_target_bandwidth(
  */
 bool encodec_reconstruct_audio(
             struct encodec_context * ectx,
-                std::vector<float> & raw_audio,
+                const std::vector<float> & raw_audio,
                                int   n_threads);
 
 /**
@@ -227,7 +227,7 @@ bool encodec_reconstruct_audio(
  */
 bool encodec_compress_audio(
             struct encodec_context * ectx,
-                std::vector<float> & raw_audio,
+                const std::vector<float> & raw_audio,
                                int   n_threads);
 
 /**
@@ -240,7 +240,7 @@ bool encodec_compress_audio(
  */
 bool encodec_decompress_audio(
             struct encodec_context * ectx,
-              std::vector<int32_t> & codes,
+              const std::vector<int32_t> & codes,
                                int   n_threads);
 
 /**
