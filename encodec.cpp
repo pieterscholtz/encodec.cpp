@@ -1395,7 +1395,7 @@ bool encodec_decompress_audio(
     return true;
 }
 
-struct encodec_context * encodec_load_model(const std::string & model_path, int n_gpu_layers) {
+struct encodec_context * encodec_load_model(const std::string & model_path, int n_gpu_layers, float bandwidthf) {
     int64_t t_start_load_us = ggml_time_us();
 
     struct encodec_context * ectx = new encodec_context();
@@ -1405,6 +1405,8 @@ struct encodec_context * encodec_load_model(const std::string & model_path, int 
         fprintf(stderr, "%s: failed to load model weights from '%s'\n", __func__, model_path.c_str());
         return {};
     }
+
+    encodec_set_target_bandwidth(ectx, bandwidthf);
 
     // pre-compute the number of codebooks required
     int bandwidth = ectx->model.hparams.bandwidth;
@@ -1417,6 +1419,7 @@ struct encodec_context * encodec_load_model(const std::string & model_path, int 
     ectx->model.hparams.hop_length = hop_length;
 
     ectx->model.hparams.n_q = get_num_codebooks(bandwidth, hop_length, sr);
+    fprintf(stderr, "%s: b_w = %d\n", __func__, ectx->model.hparams.bandwidth);
     fprintf(stderr, "%s: n_q = %d\n", __func__, ectx->model.hparams.n_q);
 
     ectx->t_load_us = ggml_time_us() - t_start_load_us;
