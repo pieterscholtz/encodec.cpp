@@ -23,7 +23,7 @@ set(ENCODEC_LIB encodec)
 
 add_subdirectory(ggml)
 
-add_library(${ENCODEC_LIB} STATIC encodec.cpp encodec.h)
+add_library(${ENCODEC_LIB} encodec.cpp encodec.h)
 
 if (ENCODEC_BUILD_EXAMPLES)
     add_subdirectory(examples)
@@ -40,3 +40,9 @@ endif()
 if (GGML_METAL)
     add_compile_definitions(GGML_USE_METAL)
 endif()
+
+install(TARGETS ${ENCODEC_LIB} DESTINATION lib)
+
+# encodecpp subdirectory will inherit current scope
+# variables and targets (e.g. ${ENCODEC_LIB})
+add_subdirectory(encodecpp/src)
